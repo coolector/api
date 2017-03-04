@@ -1,0 +1,127 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# Coolector
+
+API to collect different taggable items in sets.
+
+## List and Add items to a set [/items]
+
+### List items [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 1,
+                "url": "http://www.domain.name/resource_normalized_by_server.html",
+                "created_at": "2015-08-05 08:40:51+01:00",
+                "updated_at": "2015-08-06 08:40:51+01:00",
+                "tags": [
+                    "friends",
+                    "cool"
+                ]
+            },
+            {
+                "id": 2
+                "url": "http://www.domain.name/resource_normalized_by_server_2.html",
+                "created_at": "2015-08-05 08:40:51+01:00",
+                "updated_at": "2015-08-06 08:40:51+01:00",
+                "tags": [
+                    "friends",
+                    "cool"
+                ]
+            }
+        ]
+        
+### Create a new item [POST]
+
+You may create your own question using this action. It takes a JSON
+object containing a question and a collection of answers in the
+form of choices.
+
++ Request (application/json)
+
+        {
+            "url": "http://www.domain.name/resource.html",
+            "tags": [
+                "friends",
+                "vacation"
+            ],
+            "collectors": [
+                {
+                    "name": "jquery",
+                    "value":  "<html>|http://www.image.jpg"
+                }
+            ]
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+    
+            Location: /items/1
+
+    + Body
+
+            {
+                "id": 1,
+                "url": "http://www.domain.name/resource_normalized_by_server.html",
+                "created_at": "2015-08-05 08:40:51+01:00",
+                "updated_at": "2015-08-05 08:40:51+01:00",
+                "tags": [
+                    "friends",
+                    "vacation"
+                ]
+            }
+        
+## Get, Update or Delete existing items [/items/{item_id}]
+
++ Parameters
+    + item_id (number) - ID of the item that you need to update
+    
+### Get an item by ID [GET]
+
++ Response 201 (application/json)
+
+    + Body
+    
+            {
+                "id": 1,
+                "url": "http://www.domain.name/resource_normalized_by_server.html",
+                "created_at": "2015-08-05 08:40:51+01:00",
+                "updated_at": "2015-08-06 08:40:51+01:00",
+                "tags": [
+                    "friends",
+                    "cool"
+                ]
+            }
+
+### Update an existing item [PUT]
+
+Updating an existing item is restricted in updating only the list of tags that describe that particular item.
+The only other option to update the URL is to delete curent item and create a new one.
+
++ Request (application/json)
+
+        {
+            "tags": [
+                "friends",
+                "cool"
+            ]
+        }
+
++ Response 201 (application/json)
+
+    + Body
+    
+            {
+                "id": 1,
+                "url": "http://www.domain.name/resource_normalized_by_server.html",
+                "created_at": "2015-08-05 08:40:51+01:00",
+                "updated_at": "2015-08-06 08:40:51+01:00",
+                "tags": [
+                    "friends",
+                    "cool"
+                ]
+            }
