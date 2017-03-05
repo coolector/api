@@ -5,9 +5,61 @@ HOST: http://polls.apiblueprint.org/
 
 API to collect different taggable items in sets.
 
+## Registration [/register]
+
+### Register [POST]
+
+Create new user simply providing an email and a password
+
++ Request (application/json)
+
+        {
+            "email": "username",
+            "password": "password"
+        }
+        
++ Response 204 (application/json)
+
++ Response 409 (application/json)
+
+            {
+                "message": "Email address already exists"
+            }
+        
+## Authentication [/authenticate]
+
+### Authenticate [POST]
+
+Generate a new JSON Web Token 
+
++ Request (application/json)
+
+        {
+            "email": "username",
+            "password": "password"
+        }
+        
++ Response 200 (application/json)
+
+            {
+                "token: "JSON_Web_Token"
+            }
+            
++ Response 404 (application/json)
+
+            {
+                "message": "Email or Password incorrect"
+            }
+
 ## List and Add items to a set [/items]
 
 ### List items [GET]
+
++ Request (application/json)
+    
+    + Headers
+    
+            Authorization: Bearer JSON_Web_Token
 
 + Response 200 (application/json)
 
@@ -42,19 +94,25 @@ form of choices.
 
 + Request (application/json)
 
-        {
-            "url": "http://www.domain.name/resource.html",
-            "tags": [
-                "friends",
-                "vacation"
-            ],
-            "collectors": [
-                {
-                    "name": "jquery",
-                    "value":  "<html>|http://www.image.jpg"
-                }
-            ]
-        }
+    + Headers
+    
+            Authorization: Bearer JSON_Web_Token
+            
+    + Body
+
+            {
+                "url": "http://www.domain.name/resource.html",
+                "tags": [
+                    "friends",
+                    "vacation"
+                ],
+                "collectors": [
+                    {
+                        "name": "jquery",
+                        "value":  "<html>|http://www.image.jpg"
+                    }
+                ]
+            }
 
 + Response 201 (application/json)
 
@@ -82,6 +140,12 @@ form of choices.
     
 ### Get an item by ID [GET]
 
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer JSON_Web_Token
+
 + Response 201 (application/json)
 
     + Body
@@ -104,12 +168,18 @@ The only other option to update the URL is to delete curent item and create a ne
 
 + Request (application/json)
 
-        {
-            "tags": [
-                "friends",
-                "cool"
-            ]
-        }
+    + Headers
+    
+            Authorization: Bearer JSON_Web_Token
+            
+    + Body
+
+            {
+                "tags": [
+                    "friends",
+                    "cool"
+                ]
+            }
 
 + Response 201 (application/json)
 
