@@ -23,7 +23,7 @@ Create new user simply providing an email and a password
 + Response 409 (application/json)
 
             {
-                "message": "Email address already exists"
+                "message": "Email address already exists."
             }
         
 ## Authentication [/authenticate]
@@ -41,19 +41,26 @@ Generate a new JSON Web Token
         
 + Response 200 (application/json)
 
-            {
-                "token: "JSON_Web_Token"
-            }
+        {
+            "token: "JSON_Web_Token"
+        }
             
 + Response 404 (application/json)
 
-            {
-                "message": "Email or Password incorrect"
-            }
+        {
+            "message": "Email or Password incorrect."
+        }
 
-## List and Add items to a set [/items]
+## List and Add Items [/items{?tags}{?limit}{?offset}{?sort}{?q}]
 
 ### List items [GET]
+
++ Parameters
+    + tags: tag1,tag2 (string) - Comma delimited tags that you would like to filter the list by
+    + q: `custom text` (string) - Search by custom text that may be included in other fields or not
+    + limit: 10 (number) - Limit the number or returned results to a fixed number (Default: 10)
+    + offset: 0 (number) - Offset to shift the results by. Default: 0
+    + sort: `-created_at` (string) - Sort returend list by one field or another or by comma delimited fields in ascending or descending order
 
 + Request (application/json)
     
@@ -67,6 +74,8 @@ Generate a new JSON Web Token
             {
                 "id": 1,
                 "url": "http://www.domain.name/resource_normalized_by_server.html",
+                "title": "Title 1",
+                "image": "http://url/to_image.jpg",
                 "created_at": "2015-08-05 08:40:51+01:00",
                 "updated_at": "2015-08-06 08:40:51+01:00",
                 "tags": [
@@ -77,6 +86,8 @@ Generate a new JSON Web Token
             {
                 "id": 2
                 "url": "http://www.domain.name/resource_normalized_by_server_2.html",
+                "title": "Title 1",
+                "image": "http://url/to_image.jpg",
                 "created_at": "2015-08-05 08:40:51+01:00",
                 "updated_at": "2015-08-06 08:40:51+01:00",
                 "tags": [
@@ -85,6 +96,12 @@ Generate a new JSON Web Token
                 ]
             }
         ]
+        
++ Response 401 (application/json)
+
+        {
+            "message": "Not authenticated."
+        }
         
 ### Create a new item [POST]
 
@@ -125,6 +142,8 @@ form of choices.
             {
                 "id": 1,
                 "url": "http://www.domain.name/resource_normalized_by_server.html",
+                "title": "Title 1",
+                "image": "http://url/to_image.jpg",
                 "created_at": "2015-08-05 08:40:51+01:00",
                 "updated_at": "2015-08-05 08:40:51+01:00",
                 "tags": [
@@ -132,11 +151,23 @@ form of choices.
                     "vacation"
                 ]
             }
+            
++ Response 400 (application/json)
+
+        {
+            "message": "URL field is required."
+        }
+            
++ Response 401 (application/json)
+
+        {
+            "message": "Not authenticated."
+        }
         
-## Get, Update or Delete existing items [/items/{item_id}]
+## Get, Update or Delete Item [/items/{id}]
 
 + Parameters
-    + item_id: 1 (number) - ID of the item that you need to update
+    + id: 1 (number) - ID of an existing item
     
 ### Get an item by ID [GET]
 
@@ -153,6 +184,8 @@ form of choices.
             {
                 "id": 1,
                 "url": "http://www.domain.name/resource_normalized_by_server.html",
+                "title": "Title 1",
+                "image": "http://url/to_image.jpg",
                 "created_at": "2015-08-05 08:40:51+01:00",
                 "updated_at": "2015-08-06 08:40:51+01:00",
                 "tags": [
@@ -160,6 +193,18 @@ form of choices.
                     "cool"
                 ]
             }
+            
++ Response 401 (application/json)
+
+        {
+            "message": "Not authenticated."
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "message": "Item not found."
+        }
 
 ### Update an existing item [PUT]
 
@@ -188,6 +233,8 @@ The only other option to update the URL is to delete curent item and create a ne
             {
                 "id": 1,
                 "url": "http://www.domain.name/resource_normalized_by_server.html",
+                "title": "Title 1",
+                "image": "http://url/to_image.jpg",
                 "created_at": "2015-08-05 08:40:51+01:00",
                 "updated_at": "2015-08-06 08:40:51+01:00",
                 "tags": [
@@ -195,3 +242,114 @@ The only other option to update the URL is to delete curent item and create a ne
                     "cool"
                 ]
             }
+            
++ Response 400 (application/json)
+
+        {
+            "message": "tags field is required."
+        }
+            
++ Response 401 (application/json)
+
+        {
+            "message": "Not authenticated."
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "message": "Item not found."
+        }
+        
+### Delete and existing item [DELETE]
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer JSON_Web_Token
+            
++ Response 204 (application/json)
+
++ Response 401 (application/json)
+
+        {
+            "message": "Not authenticated."
+        }
+
++ Response 404 (application/json)
+
+        {
+            "message": "Item not found."
+        }
+        
+## List Tags [/tags{?q}{?limit}{?offset}{?sort}]
+
+### List tags [GET]
+
++ Parameters
+    + q: `custom text` (string) - Search by custom text that may be included in other fields or not
+    + limit: 10 (number) - Limit the number or returned results to a fixed number (Default: 10)
+    + offset: 0 (number) - Offset to shift the results by. Default: 0
+    + sort: `-tag,created_at` (string) - Sort returend list by one field or another or by comma delimited fields in ascending or descending order
+
++ Request (application/json)
+    
+    + Headers
+    
+            Authorization: Bearer JSON_Web_Token
+
++ Response 200 (application/json)
+
+        [
+            {
+                "tag": "friends",
+                "created_at": "2015-08-05 08:40:51+01:00"
+            },
+            {
+                "tag": "cool",
+                "created_at": "2015-08-05 08:40:51+01:00"
+            }
+        ]
+        
++ Response 401 (application/json)
+
+        {
+            "message": "Not authenticated."
+        }
+
+## Delete taggs [/tags/{tag}]
+
+### Delete tag [DELETE]
+
+If the tag is not associated with any items it will be deleted.
+
++ Parameters
+    + tag: tag1 (string) - ID of an existing item
+    
++ Request (application/json)
+    
+    + Headers
+    
+            Authorization: Bearer JSON_Web_Token
+            
++ Response 204 (application/json)
+
++ Response 401 (application/json)
+
+        {
+            "message": "Not authenticated."
+        }
+        
+
++ Response 404 (application/json)
+
+        {
+            "message": "Tag not found."
+        }
+
++ Response 409 (application/json)
+
+        {
+            "message": "Tag is in use by another item."
+        }
