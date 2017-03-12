@@ -1,10 +1,30 @@
-CREATE TABLE notes (
-    id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    note VARCHAR NOT NULL
+CREATE TABLE tags (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tag VARCHAR(255) NOT NULL,
+  created_at DATETIME NOT NULL
 );
 
-insert into notes (note) values('one');
-insert into notes (note) values('two');
-insert into notes (note) values('three');
+CREATE TABLE items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  url VARCHAR(2048) NOT NULL,
+  data TEXT NULL,
+  type TINYINT NOT NULL,
+  title VARCHAR(255) NULL,
+  image VARCHAR(2048) NULL,
+  created_at DATETIME NOT NULL,
+  updated_at DATETIME NOT NULL
+);
+
+CREATE TABLE items_tags (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  item_id INTEGER NOT NULL,
+  tag_id INTEGER NO NULL,
+  FOREIGN KEY (item_id) REFERENCES items (id)
+  ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (tag_id) REFERENCES tags (id)
+  ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
+CREATE UNIQUE INDEX idx_unique_tag_per_item ON items_tags (item_id, tag_id);
 
 
