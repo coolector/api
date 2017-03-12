@@ -125,8 +125,25 @@ form of choices.
                 ],
                 "collectors": [
                     {
-                        "name": "jquery",
-                        "value":  "<html>|http://www.image.jpg"
+                        "name": "selector",
+                        "value":  [
+                            {
+                                "element": "img",
+                                "attributes": {"class": "somclass1", "id": "attr1"},
+                                "content": null,
+                            }
+                        ]
+                    },
+                    {
+                        "name": "in_view_selector",
+                        "value":  [
+                            {
+                                "element": "img",
+                                "attributes": {"class": "somclass1", "id": "attr1"},
+                                "content": null,
+                                "visibility": 0.90
+                            }
+                        ]
                     }
                 ]
             }
